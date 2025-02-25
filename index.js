@@ -7,10 +7,10 @@ const client = new Discord.Client({
 const keepAlive = require('./server.js');
 keepAlive();
 
-function formatTime() { // Credits to himika#0001 and never#0001
+function formatTime() {
   const date = new Date();
   const options = {
-    timeZone: 'America/New_York', // Change this to your timezone
+    timeZone: 'America/New_York', 
     hour12: true,
     hour: 'numeric',
     minute: 'numeric'
@@ -21,6 +21,12 @@ function formatTime() { // Credits to himika#0001 and never#0001
 client.on('ready', async () => {
   console.clear();
   console.log(`${client.user.tag} - rich presence started!`);
+
+  // ตรวจสอบว่า client.user ถูกกำหนดและพร้อมใช้งาน
+  if (!client.user) {
+    console.error("Client is not properly logged in!");
+    return;
+  }
 
   const r = new Discord.RichPresence()
     .setApplicationId('1296771384487448596')
@@ -36,6 +42,7 @@ client.on('ready', async () => {
     .setAssetsSmallText('Small Text')
     .addButton('fav', 'https://youtu.be/d9r0pCMHBDo?si=ybrVZNVncQrGOSCV');
 
+  // ตรวจสอบว่า client.user ถูกกำหนดแล้วจึงตั้งค่าหรืออัปเดต Activity และ Presence
   client.user.setActivity(r);
   client.user.setPresence({ status: "dnd" }); // dnd, online, idle, offline
 
@@ -51,5 +58,8 @@ client.on('ready', async () => {
   }, 1000); // Update every second
 });
 
-// Login with the token from environment variable in Render
-client.login(process.env.TOKEN);
+// Login with token from environment
+const mySecret = process.env['TOKEN']; // TOKEN should be in the environment variable
+client.login(mySecret).catch((error) => {
+  console.error("Failed to login:", error);
+});
