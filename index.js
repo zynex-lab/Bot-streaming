@@ -7,10 +7,10 @@ const client = new Discord.Client({
 const keepAlive = require('./server.js');
 keepAlive();
 
-function formatTime() { //Credits to himika#0001 and never#0001
+function formatTime() { // Credits to himika#0001 and never#0001
   const date = new Date();
   const options = {
-    timeZone: 'America/New_York', //https://www.zeitverschiebung.net/en/ and find your city and enter here
+    timeZone: 'America/New_York', // Change this to your timezone
     hour12: true,
     hour: 'numeric',
     minute: 'numeric'
@@ -22,15 +22,7 @@ client.on('ready', async () => {
   console.clear();
   console.log(`${client.user.tag} - rich presence started!`);
 
-  const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
-const client = new Client({
-  intents: [GatewayIntentBits.Guilds],
-});
-
-client.on('ready', () => {
-  console.log(`${client.user.tag} is online!`);
-  
-  const r = new client.activities.RichPresence()
+  const r = new Discord.RichPresence()
     .setApplicationId('1296771384487448596')
     .setType('STREAMING')
     .setURL('https://www.twitch.tv/veiine')
@@ -46,7 +38,6 @@ client.on('ready', () => {
 
   client.user.setActivity(r);
   client.user.setPresence({ status: "dnd" }); // dnd, online, idle, offline
-});
 
   let prevTime = null;
   setInterval(() => {
@@ -60,4 +51,5 @@ client.on('ready', () => {
   }, 1000); // Update every second
 });
 
-client.login('TOKEN');
+// Login with the token from environment variable in Render
+client.login(process.env.TOKEN);
